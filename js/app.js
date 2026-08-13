@@ -85,3 +85,55 @@ function showError(msg) {
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', fetchPopularMovies);
+
+// Recherche de films via l'endpoint /search/movie (Niveau 2)
+async function searchMovies(query) {
+  if (!query.trim()) {
+    fetchPopularMovies(); // Si le champ est vide, on réaffiche les populaires
+    return;
+  }
+
+  showLoader(true);
+  errorMessage.classList.add('hidden');
+
+  try {
+    const response = await fetch(
+      `${BASE_URL}/search/movie?api_key=${API_KEY}&language=fr-FR&query=${encodeURIComponent(query)}`
+    );
+    if (!response.ok) throw new Error('Erreur lors de la recherche');
+
+    const data = await response.json();
+    movies = data.results;
+
+    sectionTitle.textContent = `Résultats pour "${query}"`;
+    renderMovies(movies);
+  } catch (error) {
+    showError('Échec de la recherche. Veuillez réessayez.');
+  } finally {
+    showLoader(false);
+  }
+}
+
+// Écouteur sur la soumission de la barre de recherche
+searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const query = searchInput.value;
+  
+  // Réinitialise l'état actif des onglets
+  tabPopular.classList.add('active');
+  tabFavorites.classList.remove('active');
+
+  searchMovies(query);
+});
+
+// Onglet "Tendances / Populaires"
+const tabPopular = document.getElementById('tab-popular');
+const tabFavorites = document.getElementById('tab-favorites');
+
+tabPopular.addEventListener('click', () => {
+  tabPopular.classList.add('active');
+  tabFavorites.classList.remove('active');
+  searchInput.value = '';
+  sectionTitle.textContent = 'Films Populaires';
+  fetchPopularMovies();
+});
