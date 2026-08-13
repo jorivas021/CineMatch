@@ -60,6 +60,6 @@ Le projet met l'accent sur l'**expérience utilisateur (UX)**, l'**accessibilit�
 ```text
 cinematch/
 ├── index.html        # Structure HTML5 principale de la SPA
-├── styles.css        # Styles UI, grille responsive, thèmes et modale
-├── app.js            # Logique REST API, manipulation du DOM, gestion des favoris
+├── css/style.css        # Styles UI, grille responsive, thèmes et modale
+├── js/app.js            # Logique REST API, manipulation du DOM, gestion des favoris
 └── README.md         # Documentation de présentation du projet
